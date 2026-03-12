@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, create_engine, Session, select
+from sqlmodel import SQLModel, create_engine, Session, func, select
 
 from models import Usuario 
 
@@ -36,4 +36,8 @@ def buscar_usuario_por_email(email_digitado: str):
         
         return usuario_encontrado
 
-    
+# 6. Função para contar total de usuários
+def contar_total_usuarios():
+    with Session(engine) as session:
+        total = session.exec(select(func.count(Usuario.id))).one()
+        return total    

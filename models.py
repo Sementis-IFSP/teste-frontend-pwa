@@ -4,8 +4,13 @@ from sqlmodel import SQLModel, Field
 class Usuario(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     nome: str
-    email: str = Field(unique=True, index=True) # Impede e-mail repetido
+    email: str = Field(unique=True, index=True)
     senha: str
-    xp: int = Field(default=0)
     idade: int
-    tipo_usuario: str 
+    tipo_usuario: str
+    
+    # Gameficação
+    moedas: int = Field(default=0)  
+    vidas: int = Field(default=5)   
+    ofensiva: int = Field(default=0) 
+    xp: int = Field(default=0)
