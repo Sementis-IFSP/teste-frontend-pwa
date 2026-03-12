@@ -12,7 +12,7 @@ def criar_tabelas():
     SQLModel.metadata.create_all(engine)
 
 # 4. Função para inserir um usuário
-def inserir_usuario(nome: str, email: str, idade: int, senha: str, tipo_usuario: str = "aluno"):
+def inserir_usuario(nome: str, email: str, idade: int, senha: str, tipo_usuario: str ):
     with Session(engine) as session:
         
         novo_usuario = Usuario(

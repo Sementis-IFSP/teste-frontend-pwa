@@ -8,4 +8,4 @@ class Usuario(SQLModel, table=True):
     senha: str
     xp: int = Field(default=0)
     idade: int
-    tipo_usuario: str = Field(default="aluno")
+    tipo_usuario: str 
