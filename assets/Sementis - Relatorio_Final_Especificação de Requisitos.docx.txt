@@ -1,0 +1,426 @@
+﻿INSTITUTO FEDERAL DE SÃO PAULO
+CAMPUS PIRITUBA
+TECNÓLOGO EM ANÁLISE E DESENVOLVIMENTO DE SISTEMAS
+
+
+
+
+Projeto Final Engenharia de Software
+  
+
+
+
+
+
+
+
+
+
+
+
+PEDRO HENRIQUE SANTOS DA SILVA
+WELLINGTON MENDES DA CUNHA
+VINICIUS RUZA MAGALHÃES
+LUCAS PERES GOMES
+
+
+
+
+
+
+
+
+
+São Paulo, SP
+2025
+Índice
+
+
+
+
+1. Identificação do Projeto        3
+1.1. Responsáveis pelo projeto        3
+1.2. Nome e missão do produto        3
+1.3. Definições, Acrônimos e Abreviações        3
+1.4. Documentos de Referência        3
+2. Objetivos e Escopo Geral        4
+2.1. Introdução ao Problema        4
+2.2. Objetivo Geral        5
+2.3. Objetivos Específicos        5
+2.4. Escopo e Limitações do Sistema        5
+3. Elicitação dos Requisitos        7
+3.1. Usuários e Stakeholders        7
+3.2. Fonte dos requisitos        7
+3.3. Técnicas e instrumentos de coleta de requisitos        8
+3.4. Requisitos Funcionais do Sistema        9
+3.5. Requisitos Não Funcionais do Sistema        10
+3.5.1. Requisitos de Projeto        10
+3.5.2. Requisitos de Processo        10
+3.5.3. Requisitos de Interface Gráfica com Usuário        10
+3.5.4. Requisitos de Acessibilidade        11
+3.5.5. Requisitos de Acesso        12
+3.5.6.Requisitos de Desempenho        12
+3.5.7 Requisitos de Portabilidade        12
+4. Diagramas        13
+5. Referências Bibliográficas        14
+
+
+
+
+________________
+
+
+1. Identificação do Projeto
+
+
+1.1. Responsáveis pelo projeto
+
+
+Nome do Projeto
+	Sementis - Raízes do Saber
+	Responsáveis
+	Lucas Peres, Pedro Henrique, Vinicius Ruza, Wellington Mendes
+	
+
+1.2. Nome e missão do produto
+
+
+Nome do produto
+	Sementis - Raízes do Saber
+	Missão do produto
+	Um site  / aplicação  voltada para o ensino de sustentabilidade de forma gamificada, oferecendo quizzes interativos e jogos que tornam o aprendizado mais envolvente para estudantes.
+	
+
+1.3. Definições, Acrônimos e Abreviações
+
+
+
+
+Abreviações e Acrônimos
+	Definições
+	Sementis
+	Nome simplificado
+	
+
+1.4. Documentos de Referência
+
+
+Relatório Final Projeto de Extensão 2
+Apresentação Final Grupo 4
+
+
+
+
+
+
+
+
+
+
+
+
+2. Objetivos e Escopo Geral
+
+
+2.1. Introdução ao Problema
+A educação contemporânea enfrenta desafios significativos no que se refere ao engajamento discente e à aplicabilidade prática dos conhecimentos transmitidos em sala de aula, especialmente em temas essenciais como a sustentabilidade. Para ilustrar esse problema de forma mais concreta, apresentamos a persona que representa esse cenário:
+
+        Zac Nilton é um estudante que gosta de matemática e física, mas não vê utilidade em matérias como biologia e sustentabilidade. Como muitos alunos, ele perde o interesse por causa de aulas monótonas e do celular, que oferecem muito mais estímulos. Assim, aprende só o básico para passar de ano e não se aprofunda em temas importantes, como práticas sustentáveis, algo que a escola também não consegue oferecer de forma personalizada. Esse cenário mostra como o modelo atual dificulta o engajamento e o aprendizado real, motivando nosso projeto a buscar formas mais dinâmicas de ensinar.
+  
+
+
+
+
+
+
+
+
+
+
+
+2.2. Objetivo Geral
+O objetivo principal é buscar integrar tecnologia, gamificação e educação por meio de um aplicativo web interativo para aumentar o engajamento que os alunos têm pelas aulas de sustentabilidade.
+
+
+
+
+2.3. Objetivos Específicos
+Os objetivos específicos do projeto permeiam o desenvolvimento e implementação de uma web plataforma gamificada que ensina sobre sustentabilidade para alunos do ensino médio que apresentam desinteresse por esse tipo de conteúdo, entre eles estão:
+* Incentivar ações sustentáveis no cotidiano através de jogos que promovem ações sustentáveis na realidade.
+* Organizar conteúdo em trilhas de aprendizagem tematizadas.
+* Implementar sistemas de gamificação e interação social como rankings globais.
+* Estabelecer um sistema de níveis e progressão, incentivando o aluno a continuar aprendendo.
+* Garantir acessibilidade oferecendo uma experiência inclusiva para todos, incluindo deficientes e com usuários com hardware barato.
+* Utilizar dados reais sobre a sustentabilidade com intuito de informar e conscientizar.
+* Implementar sistemas de sala de aula virtual para que os orientadores possam acompanhar o desempenho dos alunos.
+
+
+
+
+2.4. Escopo e Limitações do Sistema
+2.4.1 Escopo
+Terá como principal função aumentar o engajamento dos usuários para realizar os seus estudos e usar esses conhecimentos no seu dia a dia. Para tornar isso possível, será integrado na plataforma material de estudo, como questionários e conteúdos para leitura, e jogos que abordam os assuntos relacionados aos temas abordados. Os usuários principais serão os alunos e professores do ensino fundamental e médio que poderão ser incluídos em uma sala virtual que será administrada pelo professor responsável e ele irá selecionar questionários e jogos que terão a função de lição de casa e irá dar pontos para os alunos e mudará o seu ranking dependendo da sua pontuação.
+
+
+2.4.2 Limitações do Sistema
+O sistema será desenvolvido de maneira incremental por meio de atualizações que serão definidas por meio do feedback dos usuários. A plataforma deve ser capaz de  ter até 500 usuários simultâneos que terão uma resposta de alguma interação em até 5 segundos. O projeto terá uma versão inicial até o final de 2027.
+
+
+
+
+
+
+________________
+
+
+3. Elicitação dos Requisitos
+
+
+3.1. Usuários e Stakeholders
+
+
+        Os usuários do sistema abrangem diversos perfis dentro do ambiente escolar, incluindo estudantes, professores, coordenadores e demais profissionais da instituição. Esses grupos serão diretamente atendidos ou farão uso das funcionalidades do sistema.
+
+        Os stakeholders do projeto incluem gestores escolares, professores, coordenadores e também os próprios estudantes, que influenciam as necessidades, requisitos e expectativas relacionadas ao sistema.
+
+
+
+
+3.2. Fonte dos requisitos
+        A principal fonte de coleta de requisitos e casos de uso foi a observação etnográfica in loco, realizada por meio de uma visita ao Colégio Madre Paula Montalt. Durante a atividade, foram conduzidas entrevistas com os usuários (stakeholders) e registradas informações relevantes em documentos de texto e áudios, que serviram como base para a definição dos requisitos.
+  
+
+
+
+3.3. Técnicas e instrumentos de coleta de requisitos
+Para compreender o contexto do projeto e identificar as necessidades reais dos usuários, foram aplicadas diversas técnicas de coleta de dados, conforme descrito a seguir:
+• Etnografia — realizada no Colégio Madre Paula Montalt para observar o ambiente, as rotinas e o comportamento dos alunos.
+Justificativa: A presença em campo possibilitou identificar limitações, padrões de uso e oportunidades reais, garantindo que o projeto fosse orientado desde o início por evidências concretas e não apenas por suposições.
+• Entrevistas — conduzidas com membros da coordenação, professores e alunos.
+Justificativa: Essa técnica permitiu validar hipóteses, aprofundar a compreensão sobre o perfil dos usuários e coletar informações específicas. As entrevistas revelaram baixo engajamento em ações ambientais, boa receptividade a elementos de gamificação em outras atividades pedagógicas e sugestões relevantes de funcionalidades.
+• Análise de iniciativas similares — incluindo plataformas como Duolingo, Pé de Feijão e Ecochallenge.
+Justificativa: A análise comparativa contribuiu para mapear tendências e práticas consolidadas, reforçando a viabilidade da proposta de unir gamificação e sustentabilidade e permitindo identificar elementos inspiradores para a experiência do usuário.
+• Sonda Cultural — aplicada para compreender as causas do baixo interesse dos alunos em conteúdos de sustentabilidade.
+Justificativa: Essa abordagem ajudou a revelar percepções, barreiras e motivações dos estudantes, possibilitando ajustar a solução às necessidades reais do público-alvo de forma mais sensível e contextualizada.
+
+
+  
+
+3.4. Requisitos Funcionais do Sistema
+
+
+Requisitos Funcionais
+	ID
+	Descrição
+	Prioridade
+	RF01
+	O sistema deve permitir que o usuário realize autenticação (login) via e-mail e senha para acessar seu perfil e progresso salvo.
+	Alta
+	RF02
+	O sistema deve oferecer lições de sustentabilidade fornecidas pelo professor dentro da sala virtual para que o usuário possa aprender novos conceitos.
+	Alta
+	RF03
+	O sistema deve disponibilizar jogos educativos e quizzes interativos ao final de cada etapa para validar a fixação do conteúdo.
+	Alta
+	RF04
+	O sistema deve calcular e atribuir pontos de experiência e moedas virtuais ao perfil do usuário após a conclusão de tarefas ou desafios.
+	Médio
+	RF05
+	O sistema deve exibir a posição do usuário em um ranking para promover competição saudável entre os participantes (sala ou global).
+	Médio
+	RF06
+	O sistema deve permitir que os usuários com perfil de "Professor" ou "Gestor Escolar" gerem relatórios de desempenho dos alunos vinculados à sua institutição
+	Alta
+	RF07
+	O sistema deve permitir que o usuário visualize seu histórico de conquistas (insígnias/badges) e edite as informações básicas de seu perfil (nome, avatar).
+	Baixo
+	RF08
+	O sistema deve permitir que o administrador da sala virtual gerencie conteúdos e tarefas disponíveis na plataforma.
+	Alta
+	RF09
+	O sistema deve enviar notificações internas (alertas) sobre novas tarefas, missões diárias, lições, mudança no ranking e atividades aos usuários.
+	Baixo
+	RF10
+	O sistema deve permitir que o usuário autenticado altere sua senha de acesso através da área de configurações de conta.
+	Alta
+	
+
+3.5. Requisitos Não Funcionais do Sistema
+
+
+3.5.1. Requisitos de Projeto
+
+
+
+
+
+
+Requisitos de Projeto
+	ID
+	Descrição
+	RProj01
+	O sistema deverá ser entregue até dezembro de 2027, antes do término do período do curso de TADS
+	RProj02
+	A equipe responsável pelo desenvolvimento do sistema será o grupo 4 da disciplina de Projeto de Extensão
+	RProj03
+	O sistema não poderá custar mais do que R$ 10.000,00
+	RProj04
+	O sistema ficará disponível durante 1 ano após o término do curso, depois disso estará alocado a outro projeto ou desativado.
+	RProj05
+	O sistema deve estar obrigatoriamente alinhado com a ODS 4 (Meta 4.7) da Agenda 2030.
+	
+
+3.5.2. Requisitos de Processo
+
+
+Requisitos de Processo
+	ID
+	Descrição
+	RProc01
+	O sistema deverá ser desenvolvido utilizando a linguagem PHP ou Python para comunicação com o banco de dados.
+	RProc02
+	A interface deverá ser construída utilizando HTML5, CSS3 e JavaScript.
+	RProc03
+	O projeto deverá utilizar o MySQL para armazenamento de dados.
+	RProc04
+	O deploy da aplicação deverá ser feito em servidores Ubuntu Server hospedados na AWS ou Google Cloud.
+	RProc05
+	O desenvolvimento da interface deve seguir um processo iterativo de prototipagem e feedback.
+	
+
+
+
+3.5.3. Requisitos de Interface Gráfica com Usuário
+O estilo do Sementis é lúdico e guiado por progresso, diretamente inspirado na sensação de engajamento de apps como Duolingo. A interface é simplificada, porém funcional, com um foco claro em recompensas visuais e feedback imediato para motivar o aprendizado diário.
+Requisitos de Interface Gráfica com Usuário
+	ID
+	Descrição
+	RIG-01
+	O fundo da interface deve ser na cor roxo escuro (##27275E) em todas as telas principais.
+	RIG-02
+	Todos os botões interativos primários devem ser na cor branco puro (#FFFFFF).
+	RIG-03
+	Os textos em fundo escuro devem ser em branco (#FFFFFF) ou cinza muito claro (#F5F5F5). Textos em fundo claro devem ser em preto (#000000).
+	RIG-04
+	Indicadores de perda de vida, erros ou avisos devem utilizar vermelho suave (#F95B53).
+	RIG-05
+	Mensagens de acerto, recompensas e confirmações devem utilizar verde vivo (#A9FF71).
+	RIG-06
+	Parágrafos, descrições e opções de quiz devem usar uma fonte altamente legível e neutra (ex: Open Sans, Roboto).
+	RIG-07
+	Todos os botões devem ter bordas arredondadas com border-radius mínimo de 12px.
+	RIG-08
+	O número atual de vidas do usuário deve ser exibido de forma visível e constante no cabeçalho, preferencialmente com ícones de coração.
+	RIG-09
+	O saldo atual de moedas virtuais deve ser exibido no cabeçalho, próximo às vidas, com ícone e atualização em tempo real.
+	RIG-10
+	A sequência de dias seguidos (ofensiva) de uso do app deve ser exibida no cabeçalho
+	RIG-11
+	Os elementos de status (vidas, dinheiro, ofensiva) devem estar fixos no topo da tela durante a navegação.
+	
+
+
+
+
+
+3.5.4. Requisitos de Acessibilidade
+
+
+Requisitos de Acessibilidade
+	ID
+	Descrição
+	RAcess01
+	O sistema deve prever recursos como alto contraste de cores, fontes legíveis e compatibilidade com leitores de tela ou tradução em Libras para atender deficientes visuais e auditivos.
+	RAcess02
+	O sistema será acessível por qualquer dispositivo que possua um navegador web moderno (Computadores, Tablets, Celulares) e conexão com a internet
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+3.5.5. Requisitos de Acesso
+
+
+Requisitos de Acesso
+	ID
+	Descrição
+	RAc01
+	O sistema deverá diferenciar o acesso entre: Estudantes, Professores, Coordenadores e Administradores
+	RAc02
+	O acesso deve ser protegido por login e senha, pois existe um sistema de perfil e progresso individual.
+	RAc03
+	.O sistema deverá garantir que os estudantes terão acesso aos jogos, trilhas, perfil e ranking. Os Professores e Coordenadores terão acesso à gestão pedagógica. Os administradores terão acesso completo ao site.
+	
+
+
+
+
+
+3.5.6.Requisitos de Desempenho
+
+
+Requisitos de Desempenho
+	ID
+	Descrição
+	RDes01
+	O sistema deve suportar variações no número de alunos simultâneos, utilizando a escalabilidade da nuvem AWS para manter o desempenho estável, suportando até 500 usuários simultâneos
+	RProc02
+	O uso de HTML5 e CSS3 no front-end deve garantir que elementos multimídia e gráficos sejam carregados de forma eficiente, sem exigir hardware potente do usuário.
+	
+
+
+
+
+
+3.5.7 Requisitos de Portabilidade
+
+
+Requisitos de Portabilidade
+	ID
+	Descrição
+	RPORT1
+	O sistema é uma aplicação web. Logo é compatível com qualquer sistema operacional que suporte navegadores modernos
+	RPORT2
+	O sistema deve rodar independentemente do sistema operacional do dispositivo (Windows, Linux, Android, IOS, etc)
+	________________
+
+
+4. Diagramas
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5. Referências Bibliográficas
+* Livro “Gamificação na Educação” disponível em: https://encurtador.com.br/afq1K
+* Inspirações na metodologia e layout do Duolingo
+* Inspiração na iniciativa do programa EcoChallenge
+
+
+
+
+IFSP – ADS: ENGENHARIA DE SOFTWARE – Prof. Luiz Albano        Página

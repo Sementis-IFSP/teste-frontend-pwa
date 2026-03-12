@@ -160,14 +160,16 @@ function handleLogin() {
 }
 
 function handleRegister() {
-    const name = document.getElementById('registerName').value;
+    const nome = document.getElementById('registerName').value;
     const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
+    const senha = document.getElementById('registerPassword').value;
     const confirmPassword = document.getElementById('registerConfirmPassword').value;
+    const idade = parseInt(document.getElementById('registerAge').value);
+    const tipo_usuario = document.querySelector('input[name="userType"]:checked').value;
     const acceptTerms = document.getElementById('acceptTerms').checked;
 
     // Validations
-    if (name.trim().length < 2) {
+    if (nome.trim().length < 2) {
         showNotification('Por favor, insira seu nome completo.', 'error');
         return;
     }
@@ -177,12 +179,17 @@ function handleRegister() {
         return;
     }
 
-    if (password.length < 8) {
+    if (!idade || idade < 5 || idade > 120) {
+        showNotification('Por favor, insira uma idade válida.', 'error');
+        return;
+    }
+
+    if (senha.length < 8) {
         showNotification('A senha deve ter pelo menos 8 caracteres.', 'error');
         return;
     }
 
-    if (password !== confirmPassword) {
+    if (senha !== confirmPassword) {
         showNotification('As senhas não coincidem.', 'error');
         return;
     }
@@ -198,7 +205,7 @@ function handleRegister() {
     // Simulate redirect
     setTimeout(() => {
         // window.location.href = '/dashboard';
-        console.log('Register data:', { name, email, password });
+        console.log('Register data:', { nome, email, senha, idade, tipo_usuario });
     }, 1500);
 }
 
