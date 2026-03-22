@@ -1,0 +1,20 @@
+{
+  "name": "Sementis",
+  "short_name": "Sementis",
+  "description": "Plataforma gamificada para aprender sustentabilidade.",
+  "lang": "pt-BR",
+  "start_url": "../index.html",
+  "scope": "../",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1a1a4a",
+  "background_color": "#27275e",
+  "icons": [
+    {
+      "src": "../assets/icons/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

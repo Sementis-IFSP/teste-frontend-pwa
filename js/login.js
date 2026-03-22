@@ -154,7 +154,7 @@ function handleLogin() {
 
     // Simulate redirect
     setTimeout(() => {
-        // window.location.href = '/dashboard';
+        window.location.href = 'home.html';
         console.log('Login data:', { email, password });
     }, 1500);
 }
@@ -204,7 +204,7 @@ function handleRegister() {
 
     // Simulate redirect
     setTimeout(() => {
-        // window.location.href = '/dashboard';
+        window.location.href = 'home.html';
         console.log('Register data:', { nome, email, senha, idade, tipo_usuario });
     }, 1500);
 }
