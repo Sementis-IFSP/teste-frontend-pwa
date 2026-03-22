@@ -1,0 +1,69 @@
+from flask import Flask, request, jsonify
+# Importamos as funções do arquivo crud.py que o grupo criou
+from crud import inserir_usuario, criar_tabelas
+# Biblioteca para o Argon2id (criptografia)
+from passlib.hash import argon2
+
+app = Flask(__name__)
+
+# PEPPER: Uma chave secreta que só nós sabemos. 
+# Ela NÃO fica no banco de dados. Isso impede que hackers quebrem as senhas
+# mesmo que eles consigam roubar o arquivo sementis.db.
+PEPPER = "Sementis_nao_esta_com_nada_go_Gratia!"
+
+# Config do argon2id 
+# m=65536: Usa 64MB de RAM (Memory Hard) para travar placas de vídeo
+# t=4: Faz o processo 4 vezes para cansar o processador (CPU Hard)
+# p=4: Divide o trabalho em 4 núcleos (Paralelismo)
+config_argon2 = argon2.using(
+    memory_cost=65536, 
+    rounds=4, 
+    parallelism=4
+)
+
+# Garante que as tabelas do banco de dados sejam criadas ao iniciar o app
+criar_tabelas()
+
+# --- Rota de Cadastro ---
+@app.route('/cadastro', methods=['POST'])
+def cadastro():
+    # Pega os dados enviados pelo Vini (ou pelo Front-end)
+    dados = request.get_json()
+    
+    if not dados:
+        return jsonify({"erro": "Nenhum dado recebido"}), 400
+
+    # Pega a senha que o cliente digitou
+    senha_limpa = dados.get('senha')
+
+    # --- Criptografia ---
+    # 1. Misturamos a senha do cliente com a nossa Pepper
+    senha_com_pimenta = senha_limpa + PEPPER
+    
+    # 2. Transformamos a senha em um "Hash" (oh meu Deus, o que eu fiz?)
+    # O Argon2id vai usar as configurações pesadas que definimos acima
+    senha_segura = config_argon2.hash(senha_com_pimenta)
+
+    try:
+        # Enviamos os dados para a função do crud.py salvar no banco
+        novo_user = inserir_usuario(
+            nome=dados.get('nome'),
+            email=dados.get('email'),
+            idade=dados.get('idade'),
+            senha=senha_segura, 
+            tipo_usuario=dados.get('tipo_usuario')
+        )
+
+        # Se chegou aqui, deu tudo certo! Gratia!
+        return jsonify({
+            "mensagem": "Usuário cadastrado com sucesso no Sementis!",
+            "id": novo_user.id
+        }), 201
+
+    except Exception as e:
+        # Se o e-mail já existir ou der erro no banco, cai aqui no limbo
+        return jsonify({"erro": f"Erro ao cadastrar: {str(e)}"}), 500
+
+if __name__ == '__main__':
+    # Roda o servidor no modo Debug (reinicia sozinho quando você salva o código)
+    app.run(debug=True)
