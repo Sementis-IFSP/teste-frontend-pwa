@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initAuthTabs();
     initPasswordToggle();
     initPasswordStrength();
-    initFormValidation();
+    //initFormValidation(); Pedro: ta comentado pois ja temos a api funcionando, e a validação é feita no backend, mas pode ser descomentado para testes locais
     checkHashForRegister();
 });
 

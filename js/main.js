@@ -117,3 +117,33 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+// ===== Controle de Autenticação (Login/Logout) =====
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Olha a gaveta do navegador
+    const usuarioSalvo = localStorage.getItem("user");
+
+    // 2. Se achar alguém salvo lá...
+    if (usuarioSalvo) {
+        const user = JSON.parse(usuarioSalvo);
+
+        // 3. Procura a div dos botões (Lembra do id="auth-actions" no HTML!)
+        const authContainer = document.getElementById("auth-actions");
+
+        if (authContainer) {
+            // 4. Troca os botões pelo nome do usuário
+            //Pedro: So arrumei a crase aq 
+            authContainer.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="color: white; font-weight: 500;">Olá, ${user.nome}!</span>
+                    <button onclick="fazerLogout()" class="btn btn--outline" style="padding: 8px 16px; min-width: auto;">Sair</button>
+                </div>
+            `;
+        }
+    }
+});
+
+// ===== Função do Botão Sair =====
+function fazerLogout() {
+    localStorage.removeItem("user"); // Limpa a gaveta
+    window.location.reload(); // Atualiza a página
+}
