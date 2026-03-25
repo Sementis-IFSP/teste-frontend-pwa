@@ -2,9 +2,15 @@ from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 from crud import inserir_usuario, criar_tabelas, buscar_usuario_por_email
 from passlib.hash import argon2
-import os  # <--- ADICIONE ESTA LINHA
+from functools import wraps
+import os
+from datetime import datetime, timezone, timedelta
+import jwt
+
 
 app = Flask(__name__)
+
+SECRET_KEY = "chave_super_secreta_2026_GRATIA!"
 
 # =====================================================================
 # --- ALTERAÇÃO FEITA POR PEDRO SANTOS ---
@@ -31,6 +37,42 @@ config_argon2 = argon2.using(
 
 # Garante que as tabelas do banco de dados sejam criadas ao iniciar o app
 criar_tabelas()
+# =====================================================================
+#                           --- Tokens ---
+# =====================================================================
+#Função criada para não repetir o mesmo codigo em cada rota
+def token_obrigatorio(f):
+    """Decorador que protege rotas - só acessa com token válido"""
+    #Copia a documentação e outras propriedades da função original
+    @wraps(f)
+    #Função que substitui a função original
+    #*args e **kwargs vão capturar todos os argumentos que a função original receberia
+    def decorador(*args, **kwargs):
+        #Cria o token vazio
+        token = None
+        
+        # Pega o token do cabeçalho Authorization
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].replace('Bearer ', '')
+        
+        #Caso não, da erro, o que significa que o usuario nunca enviou token
+        if not token:
+            return jsonify({"erro": "Token não fornecido!"}), 401
+        
+        try:
+            # Tenta decodificar o token
+            dados_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            # Guarda os dados do usuário na requisição
+            request.usuario_id = dados_token['usuario_id']
+            request.usuario_nome = dados_token['nome']
+            request.usuario_tipo = dados_token['tipo']
+        except jwt.ExpiredSignatureError:
+            return jsonify({"erro": "Token expirado! Faça login novamente."}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"erro": "Token inválido!"}), 401
+        
+        return f(*args, **kwargs)
+    return decorador
 
 # =====================================================================
 # --- ROTAS PARA SERVIR ARQUIVOS ESTÁTICOS (CSS, JS, IMAGENS) ---
@@ -123,6 +165,19 @@ def login():
     try:
         # 3. O Argon2 verifica se a senha bate com o Hash do banco
         if config_argon2.verify(senha_com_pimenta, usuario.senha):
+             # Cria o token JWT que dura 7 dias
+            expiracao = datetime.now(timezone.utc) + timedelta(days=7)
+            payload = {
+                'usuario_id': usuario.id,
+                'nome': usuario.nome,
+                'email': usuario.email,
+                'tipo': usuario.tipo_usuario,
+                'exp': expiracao,
+                'iat': datetime.now(timezone.utc)
+            }
+            
+            token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
             # Login Sucesso! Retornamos os dados para o PWA salvar
             return jsonify({
                 "mensagem": "Login realizado com sucesso!",
@@ -140,6 +195,42 @@ def login():
     except Exception:
         # Caso o hash esteja corrompido ou algo mude na config
         return jsonify({"erro": "Erro ao verificar credenciais"}), 500
+    
+#Validação do token
+@app.route('/validar-token', methods=['POST'])
+def validar_token():
+    """Rota para verificar se um token ainda é válido"""
+    token = None
+    
+    if 'Authorization' in request.headers:
+        token = request.headers['Authorization'].replace('Bearer ', '')
+    
+    if not token:
+        return jsonify({"valido": False, "erro": "Token não fornecido"}), 401
+    
+    try:
+        dados_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return jsonify({
+            "valido": True,
+            "usuario": {
+                "id": dados_token['usuario_id'],
+                "nome": dados_token['nome']
+            }
+        }), 200
+    except jwt.ExpiredSignatureError:
+        return jsonify({"valido": False, "erro": "Token expirado"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"valido": False, "erro": "Token inválido"}), 401
+
+@app.route('/perfil', methods=['GET'])
+@token_obrigatorio
+def perfil():
+    """Exemplo de rota protegida que precisa de token"""
+    return jsonify({
+        "mensagem": f"Bem-vindo ao seu perfil, {request.usuario_nome}!",
+        "usuario_id": request.usuario_id,
+        "tipo": request.usuario_tipo
+    }), 200
 
 if __name__ == '__main__':
     # Roda o servidor no modo Debug (reinicia sozinho quando você salva o código)
