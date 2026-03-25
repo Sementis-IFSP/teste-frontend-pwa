@@ -1,9 +1,8 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS  # <--- Import adicionado pelo Pedro
-# Importamos as funções do arquivo crud.py que o grupo criou
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from crud import inserir_usuario, criar_tabelas, buscar_usuario_por_email
-# Biblioteca para o Argon2id (criptografia)
 from passlib.hash import argon2
+import os  # <--- ADICIONE ESTA LINHA
 
 app = Flask(__name__)
 
@@ -32,6 +31,35 @@ config_argon2 = argon2.using(
 
 # Garante que as tabelas do banco de dados sejam criadas ao iniciar o app
 criar_tabelas()
+
+# =====================================================================
+# --- ROTAS PARA SERVIR ARQUIVOS ESTÁTICOS (CSS, JS, IMAGENS) ---
+# =====================================================================
+
+@app.route('/')
+def index():
+    """Serve a página inicial"""
+    return send_from_directory('.', 'index.html')
+
+# Rota para servir qualquer arquivo estático
+@app.route('/<path:filename>')
+def serve_static(filename):
+    """Serve arquivos CSS, JS, imagens, etc."""
+    # Verifica se o arquivo existe
+    if os.path.exists(filename):
+        return send_from_directory('.', filename)
+    else:
+        return f"Arquivo não encontrado: {filename}", 404
+
+# Rota específica para o arquivo com espaço no nome
+@app.route('/trilha%20(1).html')
+def trilha():
+    """Serve a página de trilhas"""
+    return send_from_directory('.', 'trilha (1).html')
+
+# =====================================================================
+# --- ROTAS DE API ---
+# =====================================================================
 
 # --- Rota de Cadastro ---
 @app.route('/cadastro', methods=['POST'])
@@ -72,8 +100,6 @@ def cadastro():
     except Exception as e:
         # Se o e-mail já existir ou der erro no banco, cai aqui no limbo
         return jsonify({"erro": f"Erro ao cadastrar: {str(e)}"}), 500
-    
-
 
 # --- Rota de Login ---
 @app.route('/login', methods=['POST'])
