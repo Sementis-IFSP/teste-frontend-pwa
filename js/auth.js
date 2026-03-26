@@ -9,9 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const senhaDigitada = document.getElementById('loginPassword').value;
 
             try {
-                // ATENÇÃO: Mesmo link do Ngrok, mas agora terminando em /login
-                // Lembre-se de atualizar esse link toda vez que o Ngrok gerar um novo!
-                const urlDoServidor = "http://127.0.0.1:5000/login";
+                // ATENÇÃO: Como o Python agora roda o site junto com a API, 
+                // não precisamos mais colocar "http://0.0.0.127/...". Usamos apenas a rota!
+                const urlDoServidor = "/login";
 
                 const resposta = await fetch(urlDoServidor, {
                     method: "POST",
@@ -28,10 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (resposta.ok) {
                     alert("Login realizado com sucesso! Bem-vindo de volta! 🌿");
-                    
-                    // Salva na gaveta os dados que o Lucas mandou (com moedas, xp, etc)
+
+                    // 1. Salva a Chave de Segurança (O Token que o Lucas gerou)
+                    localStorage.setItem("token", resultado.token);
+
+                    // 2. Salva na gaveta os dados do usuário (com moedas, xp, vidas, etc)
                     localStorage.setItem("user", JSON.stringify(resultado.usuario));
-                    
+
                     // Manda pra Home
                     window.location.href = "index.html";
                 } else {

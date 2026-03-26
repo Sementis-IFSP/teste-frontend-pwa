@@ -181,6 +181,7 @@ def login():
             # Login Sucesso! Retornamos os dados para o PWA salvar
             return jsonify({
                 "mensagem": "Login realizado com sucesso!",
+                "token": token,
                 "usuario": {
                     "id": usuario.id,
                     "nome": usuario.nome,
