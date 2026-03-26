@@ -187,7 +187,9 @@ def login():
                     "nome": usuario.nome,
                     "xp": usuario.xp,
                     "moedas": usuario.moedas,
-                    "tipo": usuario.tipo_usuario
+                    "tipo": usuario.tipo_usuario,
+                    "ofensiva": usuario.ofensiva,
+                    "vidas": usuario.vidas
                 }
             }), 200
         else:
