@@ -95,7 +95,7 @@ function handleNavigation(section) {
             showModulesView();
             break;
         case 'Ligas':
-            console.log('Navigate to leagues page');
+            window.location.href = 'ligas.html';
             break;
         case 'Missões':
             console.log('Navigate to missions page');
