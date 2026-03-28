@@ -7,7 +7,7 @@ const APP_SHELL_FILES = [
   "./index.html",
   "./login.html",
   "./home.html",
-  "./trilha%20(1).html",
+  "./trilhas.html",
   "./pwa/manifest.webmanifest",
   "./css/styles.css",
   "./css/landing.css",
