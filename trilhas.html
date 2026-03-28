@@ -521,6 +521,7 @@
     }
   }
 </style>
+<link rel="stylesheet" href="css/shared-navbar.css">
 </head>
 <body>
 
@@ -536,29 +537,7 @@
 
 <div class="trail-scene" id="scene"></div>
 
-<nav class="bottom-nav" aria-label="Navegacao principal">
-  <div class="sidebar-logo">
-    <img src="assets/brand/logo_sementis_branco.png" alt="Sementis">
-  </div>
-  <div class="nav-items-wrapper">
-    <a class="nav-item active" href="home.html" aria-current="page">
-      <img src="assets/icons/menu_rodape_tarefa.png" alt="Trilhas">
-      <span>Trilhas</span>
-    </a>
-    <a class="nav-item" href="ligas.html">
-      <img src="assets/icons/menu_rodape_trofeu_liga.png" alt="Ligas">
-      <span>Ligas</span>
-    </a>
-    <a class="nav-item" href="home.html">
-      <img src="assets/icons/menu_rodape_alvo.png" alt="Missões">
-      <span>Missões</span>
-    </a>
-    <a class="nav-item" href="home.html">
-      <img src="assets/icons/menu_rodape_usuario.png" alt="Perfil">
-      <span>Perfil</span>
-    </a>
-  </div>
-</nav>
+<div id="shared-navbar-root"></div>
 
 <script>
 function applyModuleTitle() {
@@ -712,5 +691,6 @@ build();
 window.addEventListener('resize', build);
 </script>
 <script src="pwa/pwa-register.js"></script>
+<script src="js/shared-navbar.js"></script>
 </body>
 </html>

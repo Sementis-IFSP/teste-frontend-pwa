@@ -15,9 +15,11 @@ const APP_SHELL_FILES = [
   "./css/login.css",
   "./css/home.css",
   "./css/ligas.css",
+  "./css/shared-navbar.css",
   "./js/main.js",
   "./js/login.js",
   "./js/home.js",
+  "./js/shared-navbar.js",
   "./pwa/pwa-register.js",
   "./assets/icons/pwa-icon.svg",
   "./assets/brand/logo_sementis_branco.png"
@@ -89,3 +91,6 @@ self.addEventListener("fetch", (event) => {
     );
   }
 });
+
+
+
