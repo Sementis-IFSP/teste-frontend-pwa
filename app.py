@@ -96,11 +96,11 @@ def serve_static(filename):
     else:
         return f"Arquivo não encontrado: {filename}", 404
 
-# Rota específica para o arquivo com espaço no nome
-@app.route('/trilha%20(1).html')
+# Rota específica para a página de trilhas
+@app.route('/trilhas.html')
 def trilha():
     """Serve a página de trilhas"""
-    return send_from_directory('.', 'trilha (1).html')
+    return send_from_directory('.', 'trilhas.html')
 
 # =====================================================================
 # --- ROTAS DE API ---
