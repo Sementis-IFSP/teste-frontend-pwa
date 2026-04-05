@@ -11,8 +11,6 @@
     return;
   }
 
-  return; console.log("PWA DESATIVADO PARA DESENVOLVIMENTO") // REMOVA ESTA LINHA PARA ATIVAR O PWA DURANTE O DESENVOLVIMENTO
-
   window.addEventListener("load", async () => {
     try {
       const registration = await navigator.serviceWorker.register("./sw.js", {

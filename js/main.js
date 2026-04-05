@@ -131,18 +131,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (authContainer) {
             // 4. Troca os botões pelo nome do usuário
-            //Pedro: So arrumei a crase aq 
+            // encapsula a opcao de ir para home, e sair dentro do icon de perfil mencionado
             authContainer.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <span style="color: white; font-weight: 500;">Olá, ${user.nome}!</span>
-                    <button onclick="fazerLogout()" class="btn btn--outline" style="padding: 8px 16px; min-width: auto;">Sair</button>
+                <div class="user-profile-menu">
+                    <span class="user-greeting">Olá, ${user.nome}!</span>
+                    <div class="profile-dropdown-container">
+                        <img src="assets/icons/menu_rodape_usuario.png" alt="Perfil" class="profile-icon-btn" onclick="toggleProfileDropdown(event)" title="Opções de Perfil">
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <a href="home.html" class="dropdown-item" style="display:flex; align-items:center; gap:8px;">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                Ir para Home
+                            </a>
+                            <button onclick="fazerLogout()" class="dropdown-item" style="display:flex; align-items:center; gap:8px;">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                Sair
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
         }
     }
 });
 
-// ===== Função do Botão Sair =====
+// ===== Funções do Perfil e Logout =====
+window.toggleProfileDropdown = function(event) {
+    if (event) event.stopPropagation();
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown) {
+        dropdown.classList.toggle('active');
+    }
+};
+
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('profileDropdown');
+    if (dropdown && dropdown.classList.contains('active')) {
+        const menu = document.querySelector('.user-profile-menu');
+        if (!menu || !menu.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    }
+});
+
 function fazerLogout() {
     localStorage.removeItem("user"); // Limpa a gaveta
     window.location.reload(); // Atualiza a página

@@ -100,18 +100,3 @@ def listar_trilhas_do_modulo(session: Session, id_modulo: int):
 def listar_atividades_da_trilha(session: Session, id_trilha: int):
     instrucao = select(Atividade).where(Atividade.trilha_id == id_trilha).order_by(Atividade.ordem)
     return session.exec(instrucao).all()
-
-# 11. Buscar ranking global de usuários
-def buscar_ranking_global(session, limite=100):
-    """
-    Busca os melhores usuários ordenados por XP de forma decrescente.
-    Por padrão, traz os top 100 para preencher a tela inteira.
-    """
-    # 1. Seleciona todos os usuários, ordena pelo decrescente, e limite a X"
-    statement = select(Usuario).order_by(Usuario.xp.desc()).limit(limite)
-    
-    # 2. Executa a busca no banco de dados e pega todos os resultados
-    resultados = session.exec(statement).all()
-    
-    # 3. Devolve a lista de objetos 'Usuario'
-    return resultados
