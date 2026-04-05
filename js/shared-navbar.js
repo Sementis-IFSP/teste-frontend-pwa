@@ -13,7 +13,9 @@ function buildSharedNavbar(activeSection) {
   return `
 <nav class="bottom-nav" aria-label="Navegacao principal">
   <div class="sidebar-logo">
-    <img src="assets/brand/logo_sementis_branco.png" alt="Sementis">
+    <a href="index.html" aria-label="Ir para a pagina inicial" class="sidebar-logo-link">
+      <img src="assets/brand/logo_sementis_branco.png" alt="Sementis">
+    </a>
   </div>
   <div class="nav-items-wrapper">
     <a class="nav-item ${isTrilhas ? 'active' : ''}" href="home.html" ${isTrilhas ? 'aria-current="page"' : ''}>
@@ -43,6 +45,14 @@ function mountSharedNavbar() {
 
   const activeSection = getActiveSection();
   host.innerHTML = buildSharedNavbar(activeSection);
+
+  const sidebarLogoLink = host.querySelector('.sidebar-logo-link');
+  if (sidebarLogoLink) {
+    sidebarLogoLink.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.location.href = 'index.html';
+    });
+  }
 }
 
 document.addEventListener('DOMContentLoaded', mountSharedNavbar);
