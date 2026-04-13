@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, create_engine, Session, func, select
-
-# Importando todas as tabelas do novo models.py
-from models import Usuario, Modulo, Trilha, Atividade, ProgressoUsuario
+from datetime import date
+# Importando todas as tabelas do models.py
+from models import Usuario, Modulo, Trilha, Atividade, ProgressoUsuario, Missao, ProgressoMissao
 
 # 1. Sqlite local
 sqlite_url = "sqlite:///sementis.db"
@@ -67,20 +67,65 @@ def adicionar_pontuacao(session: Session, id_usuario: int, xp: int, moedas: int)
 
 # 7. Registrar a conclusão de uma atividade (a bolinha)
 def registrar_conclusao_atividade(session: Session, id_usuario: int, id_atividade: int):
-    # Busca a atividade (bolinha) para saber quanto de XP e moedas ela vale
+    # Busca a atividade e o usuário primeiro
     atividade = session.get(Atividade, id_atividade)
+    usuario = session.get(Usuario, id_usuario)
     
-    if atividade:
-        # Registra que o usuário terminou essa bolinha específica
-        novo_progresso = ProgressoUsuario(usuario_id=id_usuario, atividade_id=id_atividade)
-        session.add(novo_progresso)
-        
-        # Chama a função do seu card para dar a recompensa!
-        adicionar_pontuacao(session, id_usuario, atividade.xp_recompensa, atividade.moedas_recompensa)
-        
+    if not atividade or not usuario:
+        return {"status": "erro", "mensagem": "Usuário ou Atividade não encontrados"}
+
+    # 1. Verifica se já existe esse progresso no banco
+    ja_concluiu = session.exec(
+        select(ProgressoUsuario).where(
+            ProgressoUsuario.usuario_id == id_usuario, 
+            ProgressoUsuario.atividade_id == id_atividade
+        )
+    ).first()
+    
+    try:
+        if ja_concluiu:
+            # === REFAZENDO A FASE (REPLAY) ===
+            # Ganha só 20% do XP e nenhuma moeda extra. Não cria progresso novo.
+            xp_reduzido = int(atividade.xp_recompensa * 0.2)
+            usuario.xp += xp_reduzido
+            mensagem = f"Fase refeita! Você ganhou {xp_reduzido} XP."
+            
+        else:
+            # === PRIMEIRA VEZ JOGANDO ===
+            # Dá a recompensa total e registra que ele passou de fase
+            usuario.xp += atividade.xp_recompensa
+            usuario.moedas += atividade.moedas_recompensa
+            
+            novo_progresso = ProgressoUsuario(usuario_id=id_usuario, atividade_id=id_atividade)
+            session.add(novo_progresso)
+            
+            mensagem = f"Fase concluída! Você ganhou {atividade.xp_recompensa} XP."
+            
+            # TODO: Lógica para desbloquear a PRÓXIMA atividade entra aqui no futuro
+
+        # Salva tudo de uma vez só no banco de dados (Atomicidade)
+        session.add(usuario)
         session.commit()
-        return True
-    return False
+        
+        return {
+            "status": "sucesso", 
+            "mensagem": mensagem, 
+            "xp_atual": usuario.xp, 
+            "moedas_atuais": usuario.moedas
+        }
+
+    except Exception as e:
+        # Se der qualquer erro no processo, cancela tudo para não bugar o XP
+        session.rollback()
+        return {"status": "erro", "mensagem": f"Erro interno: {str(e)}"}
+
+def buscar_ranking_geral(session: Session, limite: int = 10):
+    """Retorna o top X usuários com mais XP"""
+    # select(Usuario) vai pegar a tabelaa de usuarios
+    # order_by(Usuario.xp.desc()) pega o maior XP para o menor
+    # limit(limite) pega so o top 10, definido no int ali encima
+    instrucao = select(Usuario).order_by(Usuario.xp.desc()).limit(limite)
+    return session.exec(instrucao).all()
 
 # ==========================================
 # FUNÇÕES DE LEITURA PARA O FRONT-END
@@ -100,3 +145,104 @@ def listar_trilhas_do_modulo(session: Session, id_modulo: int):
 def listar_atividades_da_trilha(session: Session, id_trilha: int):
     instrucao = select(Atividade).where(Atividade.trilha_id == id_trilha).order_by(Atividade.ordem)
     return session.exec(instrucao).all()
+
+
+
+# 11. Sortear missões diárias para um usuário
+def sortear_missoes_diarias(session: Session, id_usuario: int, qtd_missoes: int = 3):
+    """
+    Busca as missões do dia para o usuário. Se ele não tiver, sorteia novas.
+    O parâmetro qtd_missoes permite mudar a quantidade no futuro 
+    """
+    hoje = date.today()
+    
+    # 1. Verifica se o usuário já tem missões salvas com a data de HOJE
+    instrucao_hoje = select(ProgressoMissao).where(
+        ProgressoMissao.usuario_id == id_usuario,
+        ProgressoMissao.data_missao == hoje
+    )
+    progresso_hoje = session.exec(instrucao_hoje).all()
+    
+    # Se já tem
+    if progresso_hoje:
+        return progresso_hoje
+
+    # 2. Se não tem, sortear missões
+    # O func.random() faz o banco embaralhar as linhas antes de pegar
+    instrucao_sorteio = select(Missao).order_by(func.random()).limit(qtd_missoes)
+    novas_missoes = session.exec(instrucao_sorteio).all()
+    
+    # Se o banco de dados estiver vazio (sem missões cadastradas), evita dar erro
+    if not novas_missoes:
+        return []
+
+    # 3. Cria o "Save" (ProgressoMissao) de cada missão sorteada para o usuário
+    lista_progresso = []
+    for missao in novas_missoes:
+        novo_progresso = ProgressoMissao(
+            usuario_id=id_usuario,
+            missao_id=missao.id,
+            data_missao=hoje, # Trava na data de hoje
+            progresso_atual=0,
+            concluida=False
+        )
+        session.add(novo_progresso)
+        lista_progresso.append(novo_progresso)
+        
+    # Salva tudo no banco de uma vez só
+    session.commit()
+    
+    # Retorna a lista nova que acabou de ser criada
+    return lista_progresso
+
+
+# 12. Atualizar progressao de missão REVISAR DEPOIS
+
+def atualizar_progresso_missao(session: Session, id_usuario: int, tipo_acao_realizada: str):
+    """
+    Sobe o progresso de uma missão. 
+    Ex: Se o aluno passou de fase, chama atualizar_progresso_missao(session, id, 'concluir_fase')
+    """
+    hoje = date.today()
+    
+    # 1. Busca as missões de HOJE, do ALUNO, que NÃO estão concluídas
+    instrucao = select(ProgressoMissao).where(
+        ProgressoMissao.usuario_id == id_usuario,
+        ProgressoMissao.data_missao == hoje,
+        ProgressoMissao.concluida == False
+    )
+    missoes_de_hoje = session.exec(instrucao).all()
+    
+    missoes_concluidas_agora = [] 
+    
+    # 2. Varre as missões para ver se alguma precisa da ação que ele acabou de fazer
+    for progresso in missoes_de_hoje:
+        missao_catalogo = session.get(Missao, progresso.missao_id)
+        
+        if missao_catalogo.tipo_acao == tipo_acao_realizada:
+            # 3. Sobe o progresso (ex: de 0/2 vai pra 1/2)
+            progresso.progresso_atual += 1
+            
+            # 4. Verifica se bateu a meta (ex: chegou em 2/2)
+            if progresso.progresso_atual >= missao_catalogo.meta:
+                progresso.concluida = True
+                
+                # 5. resgate automatico da recompensa (XP e Moedas)
+                usuario = session.get(Usuario, id_usuario)
+                usuario.xp += missao_catalogo.xp_recompensa
+                usuario.moedas += missao_catalogo.moedas_recompensa
+                session.add(usuario)
+                
+                # Guarda o nome pra devolver pro Front-end
+                missoes_concluidas_agora.append({
+                    "titulo": missao_catalogo.titulo,
+                    "xp_ganho": missao_catalogo.xp_recompensa
+                })
+            
+            session.add(progresso)
+            
+    # Salva tudo de uma vez
+    session.commit()
+    
+    # Retorna o que ele terminou pra tela dar algum retorno visual
+    return missoes_concluidas_agora
